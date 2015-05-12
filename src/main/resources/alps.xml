@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<alps version="1.0">
+    <doc format="text">The expense server!</doc>
+
+
+    <descriptor id=""
+
+    <!-- a hypermedia control for returning expense report -->
+    <descriptor id="collection" type="safe" rt="expense-report">
+        <doc>
+            A simple link/form for getting a list of expense report.
+        </doc>
+        <descriptor id="nameSearch" type="no.dv8.rest.html.support.semantic">
+            <doc>Enter a name to search for matching expense reports.</doc>
+        </descriptor>
+    </descriptor>
+
+    <!--  an expense report: one or more of these may be returned -->
+    <descriptor id="expense-report" type="no.dv8.rest.html.support.semantic">
+        <descriptor id="item" type="safe">
+            <doc>A link to an individual expense report.</doc>
+        </descriptor>
+
+        <descriptor id="description" type="no.dv8.rest.html.support.semantic">
+            <doc>
+                A name/description given to this expense report
+            </doc>
+        </descriptor>
+
+        <descriptor id="createdDate" type="no.dv8.rest.html.support.semantic"/>
+        <descriptor id="address" type="no.dv8.rest.html.support.semantic" href="http://alps.io/schema.org/PostalAddress.xml" />
+
+    </descriptor>
+
+</alps>

@@ -1,0 +1,95 @@
+<html>
+<head>
+    <title>
+        RDFTest
+    </title>
+    <script src='//code.jquery.com/jquery-2.1.3.js'>
+    </script>
+    <script src='/static/jquery.rdfquery.rdfa-1.0.js'>
+    </script>
+
+    <script defer="defer" type="text/javascript">
+$(document).ready(function(){
+
+
+    var n = $('body').egrep(/jquery/i);for (var i = 0; i < n.length; ++i) { void($(n[i]).css('background', 'yellow')); }
+
+
+    function locate( jq, pref ) {
+       console.log( pref + ": " + jq );
+       jq.children().each( function(e) { locate( e, pref + "_ " ); } );
+    }
+
+    locate( $('body'), "_" );
+
+
+    console.log( "doing it" );
+
+    $('#list').empty();
+    $('#movies')
+      .rdf()
+//      .prefix('foaf', 'http://xmlns.com/foaf/0.1/')
+//      .where('?person a foaf:Person')
+//      .where('?person foaf:depiction ?picture')
+//      .optional('?person foaf:name ?name')
+      .each(function () {
+      console.log( "found something" );
+        var
+          person = this.person.value,
+          picture = this.picture.value,
+          name = this.name === undefined ? '' : this.name.value;
+        $('#list')
+          .append('<li><a href="' + person + '"><img alt="' + name + '" src="' + picture + '" /></a></li>');
+      });
+} );
+    </script>
+
+</head>
+<body vocab='http://example.org'>
+
+
+
+<div id="movies" vocab="http://schema.org/" typeof="Movie">
+    <h1 property="name">Pirates of the Carribean: On Stranger Tides (2011)</h1>
+<span property="description">Jack Sparrow and Barbossa embark on a quest to
+ find the elusive fountain of youth, only to discover that Blackbeard and
+ his daughter are after it too.</span>
+    Director:
+    <div property="director"  typeof="Person">
+        <span property="name">Rob Marshall</span>
+    </div>
+    Writers:
+    <div property="author"  typeof="Person">
+        <span property="name">Ted Elliott</span>
+    </div>
+    <div property="author"  typeof="Person">
+        <span property="name">Terry Rossio</span>
+    </div>
+    , and 7 more credits
+    Stars:
+    <div property="actor"  typeof="Person">
+        <span property="name">Johnny Depp</span>,
+    </div>
+    <div property="actor"  typeof="Person">
+        <span property="name">Penelope Cruz</span>,
+    </div>
+    <div property="actor"  typeof="Person">
+        <span property="name">Ian McShane</span>
+    </div>
+    <div property="aggregateRating"  typeof="AggregateRating">
+        <span property="ratingValue">8</span>/<span property="bestRating">10</span> stars from
+        <span property="ratingCount">200</span> users.
+        Reviews: <span property="reviewCount">50</span>.
+    </div>
+</div>
+
+<div id="list">skal vekk...</div>
+
+<div id="content">
+    <p id="info">This paper was written by <span rel="dc:creator" resource="#me"> </span>
+        <span property="foaf:name">Ben Adida</span>.
+    </p>
+</div>
+
+</body>
+</html>
