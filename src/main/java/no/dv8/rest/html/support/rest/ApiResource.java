@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import no.dv8.rest.html.support.API;
 import no.dv8.rest.html.support.APIReader;
 import no.dv8.rest.html.support.Endpoint;
+import no.dv8.rest.html.support.htmlgen.Form;
+import no.dv8.rest.html.support.htmlgen.XHTMLAPIGenerator;
 import no.dv8.xhtml.generation.elements.div;
 import no.dv8.xhtml.generation.elements.h2;
 import no.dv8.xhtml.generation.elements.li;
@@ -67,8 +69,8 @@ public class ApiResource {
         if( endpoint.size() != 1 ) {
             throw new RuntimeException("UPS: " + endpoint.size() + " matches for " + resource + "." + methodName );
         }
-        no.dv8.rest.html.support.htmlgen.XHTMLAPIGenerator gen = new no.dv8.rest.html.support.htmlgen.XHTMLAPIGenerator(null, null, null);
-        return new no.dv8.rest.html.support.htmlgen.Form(null, endpoint.get(0) ).form().toString();
+        XHTMLAPIGenerator gen = new XHTMLAPIGenerator(null, null, null);
+        return new Form(null, endpoint.get(0) ).form().toString();
     }
 
     @GET
@@ -100,7 +102,7 @@ public class ApiResource {
                     m.getValue()
                       .stream()
                       .sorted((e1, e2) -> e1.getParameters().size() - e2.getParameters().size())
-                      .map(e -> new no.dv8.rest.html.support.htmlgen.XHTMLAPIGenerator().generateElement(e))
+                      .map(e -> new XHTMLAPIGenerator().generateElement(e))
                       .map(e -> new li().add(e))
                       .collect(toList()))
                 )

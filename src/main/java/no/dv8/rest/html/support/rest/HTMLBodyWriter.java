@@ -32,9 +32,6 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
 
-    // TODO: Inject or something...
-//    API api;
-
     static final List<Class> clz = asList( String.class, Integer.class );
 
     public static List<Endpoint> autoLinks(Object er, Type type) {
