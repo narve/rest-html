@@ -1,7 +1,7 @@
 package no.dv8.rest.html.support;
 
 import lombok.extern.slf4j.Slf4j;
-import no.dv8.rest.html.support.annotations.*;
+import no.dv8.rest.html.annotations.*;
 import no.dv8.rest.html.support.reflect.Annotations;
 
 import javax.ws.rs.*;

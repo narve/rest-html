@@ -1,4 +1,4 @@
-package no.dv8.rest.html.support.htmlgen;
+package no.dv8.rest.html.htmlgen;
 
 import no.dv8.xhtml.generation.support.Element;
 

@@ -1,6 +1,6 @@
 package no.dv8.rest.html.support;
 
-import no.dv8.rest.html.support.htmlgen.XHTMLAPIGenerator;
+import no.dv8.rest.html.htmlgen.XHTMLAPIGenerator;
 import no.dv8.xhtml.generation.support.Element;
 
 import java.util.ArrayList;

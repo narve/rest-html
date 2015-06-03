@@ -1,9 +1,9 @@
-package no.dv8.rest.html.support.annotations;
+package no.dv8.rest.html.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ResourceType {
+public @interface Target {
     String value();
 }

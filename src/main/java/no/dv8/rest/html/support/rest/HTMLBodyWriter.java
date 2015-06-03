@@ -1,9 +1,9 @@
 package no.dv8.rest.html.support.rest;
 
 import lombok.extern.slf4j.Slf4j;
-import no.dv8.rest.html.support.annotations.Rel;
-import no.dv8.rest.html.support.annotations.Target;
-import no.dv8.rest.html.support.htmlgen.XHTMLAPIGenerator;
+import no.dv8.rest.html.annotations.Rel;
+import no.dv8.rest.html.annotations.Target;
+import no.dv8.rest.html.htmlgen.XHTMLAPIGenerator;
 import no.dv8.rest.sample.semantic.Rels;
 import no.dv8.rest.html.support.APIReader;
 import no.dv8.rest.html.support.Endpoint;
@@ -27,8 +27,8 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
-@Provider
-@Produces("text/html")
+//@Provider
+//@Produces("text/html")
 @Slf4j
 public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
 

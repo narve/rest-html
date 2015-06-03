@@ -1,8 +1,10 @@
-package no.dv8.rest.html.support.htmlgen;
+package no.dv8.rest.html.htmlgen;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.java.Log;
+import no.dv8.rest.html.htmlgen.linker.Linker;
+import no.dv8.rest.html.htmlgen.linker.NoOpLinker;
 import no.dv8.rest.sample.semantic.Rels;
 import no.dv8.rest.sample.semantic.Semantics;
 import no.dv8.rest.html.support.Endpoint;
@@ -42,6 +44,7 @@ public class XHTMLAPIGenerator<T> {
     private List<Endpoint> endpoints;
 //    private SemanticDecorator semdec = new DecoratorChain( asList( new MicroDataDecorator(), new RDFADecorator()));
     private SemanticDecorator semdec = new DecoratorChain( asList( new RDFADecorator()));
+    private Linker linker = new NoOpLinker();
 
     public XHTMLAPIGenerator() {
     }

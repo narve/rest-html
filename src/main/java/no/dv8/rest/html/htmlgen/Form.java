@@ -1,11 +1,10 @@
-package no.dv8.rest.html.support.htmlgen;
+package no.dv8.rest.html.htmlgen;
 
 import com.google.gson.GsonBuilder;
 import lombok.Value;
 import no.dv8.rest.html.support.rest.ApiResource;
 import no.dv8.rest.html.support.Endpoint;
 import no.dv8.rest.html.support.Parameter;
-import no.dv8.rest.html.support.X;
 import no.dv8.rest.html.support.reflect.Properties;
 import no.dv8.xhtml.generation.elements.*;
 import no.dv8.xhtml.generation.support.Element;
@@ -16,7 +15,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
-import static no.dv8.rest.html.support.htmlgen.XHTMLAPIGenerator.pathFromTemplate;
+import static no.dv8.rest.html.htmlgen.XHTMLAPIGenerator.pathFromTemplate;
 
 
 @Value

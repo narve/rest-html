@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
 import no.dv8.rest.sample.semantic.Semantics;
-import no.dv8.rest.html.support.htmlgen.XHTMLAPIGenerator;
+import no.dv8.rest.html.htmlgen.XHTMLAPIGenerator;
 import no.dv8.xhtml.generation.elements.*;
 import no.dv8.xhtml.generation.support.Element;
 
