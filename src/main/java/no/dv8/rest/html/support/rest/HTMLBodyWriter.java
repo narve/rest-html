@@ -27,8 +27,6 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
-@Provider
-@Produces("text/html")
 @Slf4j
 public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
 
