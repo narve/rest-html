@@ -27,8 +27,8 @@ public class GenericResource {
         return asList(endpointAll(clz), searchExact(clz), searchSubstring(clz), endpointCreate(clz));
     }
 
-    public static Collection<? extends Endpoint> genDests() {
-        return asList(String.class)
+    public static Collection<? extends Endpoint> genDests(Class[] objs) {
+        return asList(objs)
           .stream()
           .map(GenericResource::genDests)
           .flatMap(l -> l.stream())

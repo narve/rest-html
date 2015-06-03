@@ -47,7 +47,15 @@ public class ApiResource {
 
     public static API getAPI() {
         API api = reader().read(GenericResource.class);
-        api.getDestinations().addAll(genDests());
+        // api.getDestinations().addAll(genDests());
+        return api;
+    }
+
+    public static API getAPI( String bp, Class[] clz, Class[] objs) {
+        APIReader reader = reader();
+        reader.basePath = bp;
+        API api = reader.read(clz);
+        api.getDestinations().addAll(genDests(objs));
         return api;
     }
 
@@ -82,40 +90,10 @@ public class ApiResource {
               .replace("<", "&lt;");
             API api = getAPI();
             List<Endpoint> dests = api.getDestinations();
-            StringBuilder sb = new StringBuilder();
 
 //            String x =
-            ul items = new ul().add(
-              dests.stream()
-//                            .filter(e -> e.getParameters().isEmpty())
-//                            .filter(e -> e.getMethods().equals( asList( "GET")))
-                .filter(e -> e.getTarget() == null)
-                .collect(
-                  groupingBy(
-                    e -> e.getJavaClz().getSimpleName(),
-                    TreeMap::new,
-                    mapping(e -> e, toSet())
-                  )
-                ).entrySet()
-                .stream()
-                .map(m -> new div().add(new h2(m.getKey())).add(
-                    m.getValue()
-                      .stream()
-                      .sorted((e1, e2) -> e1.getParameters().size() - e2.getParameters().size())
-                      .map(e -> new XHTMLAPIGenerator().generateElement(e))
-                      .map(e -> new li().add(e))
-                      .collect(toList()))
-                )
-//                    .map(k -> new li(k))
-                .collect(toList())
-              );
-
-
-//                    .map(XHTMLAPIGenerator::generateElement)
-//                    .map(e -> new li().add(e))
-//                    .collect(toList())
-//                ).toString();
-            String apiString = items.toString();
+            String apiString = apiString(dests);
+            StringBuilder sb = new StringBuilder();
             String res = new String(Files.readAllBytes(base.resolve("api.html")))
               .replaceAll(quote("{{ALPS}}"), quoteReplacement(alps))
               .replaceAll(quote("{{API}}"), quoteReplacement(apiString));
@@ -124,6 +102,40 @@ public class ApiResource {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    public String apiString(List<Endpoint> dests) {
+        ul items = new ul().add(
+          dests.stream()
+//                            .filter(e -> e.getParameters().isEmpty())
+//                            .filter(e -> e.getMethods().equals( asList( "GET")))
+            .filter(e -> e.getTarget() == null)
+            .collect(
+              groupingBy(
+                e -> e.getJavaClz().getSimpleName(),
+                TreeMap::new,
+                mapping(e -> e, toSet())
+              )
+            ).entrySet()
+            .stream()
+            .map(m -> new div().add(new h2(m.getKey())).add(
+                m.getValue()
+                  .stream()
+                  .sorted((e1, e2) -> e1.getParameters().size() - e2.getParameters().size())
+                  .map(e -> new XHTMLAPIGenerator().generateElement(e))
+                  .map(e -> new li().add(e))
+                  .collect(toList()))
+            )
+//                    .map(k -> new li(k))
+            .collect(toList())
+          );
+
+
+//                    .map(XHTMLAPIGenerator::generateElement)
+//                    .map(e -> new li().add(e))
+//                    .collect(toList())
+//                ).toString();
+        return items.toString();
     }
 
     @GET
