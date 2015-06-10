@@ -43,8 +43,8 @@ public class XHTMLAPIGenerator<T> {
     private Type what;
     private List<Endpoint> endpoints;
 //    private SemanticDecorator semdec = new DecoratorChain( asList( new MicroDataDecorator(), new RDFADecorator()));
-    private SemanticDecorator semdec = new DecoratorChain( asList( new RDFADecorator()));
-    private Linker linker = new NoOpLinker();
+    public SemanticDecorator semdec = new DecoratorChain( asList( new RDFADecorator()));
+    public Linker linker = new NoOpLinker();
 
     public XHTMLAPIGenerator() {
     }
@@ -144,7 +144,7 @@ public class XHTMLAPIGenerator<T> {
               .add(
                 items
                   .stream()
-                  .map(i -> new XHTMLAPIGenerator<>(i, null, HTMLBodyWriter.autoSelfLinks(i, what)).itemToXHTML())
+                  .map(i -> new XHTMLAPIGenerator<>(i, null, new HTMLBodyWriter().autoSelfLinks(i, what)).itemToXHTML())
                   .map(l -> new li().add(l))
 //              .map(e -> asList(e, new Custom("hr")))
                   .collect(Collectors.toList())

@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
 
-    static final List<Class> clz = asList( String.class, Integer.class );
+    public static List<Class> clz = asList( String.class, Integer.class );
 
     public static List<Endpoint> autoLinks(Object er, Type type) {
         String sem = XHTMLAPIGenerator.getTypeName(er, type);
@@ -41,7 +41,7 @@ public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
         return l1;
     }
 
-    public static Endpoint autoSelfLink(Object er, Type type) {
+    public Endpoint autoSelfLink(Object er, Type type) {
         List<Endpoint> selfLinks = autoSelfLinks(er, type);
         if (selfLinks.size() != 1) {
             throw new RuntimeException("Self-link not found - " + selfLinks.size() + " matching endpoints");
@@ -49,7 +49,7 @@ public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
         return selfLinks.get(0);
     }
 
-    public static List<Endpoint> autoSelfLinks(Object er, Type type) {
+    public List<Endpoint> autoSelfLinks(Object er, Type type) {
         List<Method> methods =
           clz
             .stream()
@@ -123,22 +123,22 @@ public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
               .vocab("http://example.org")
               .add(new h1("Auto-generated HTML version of " + what).clz("apiheader"))
               .add(new XHTMLAPIGenerator(o, what, autoLinks(o, what)).itemToXHTML())
-              .add(new div().id("rdf").add("her kommer listen...").add(new h1("asdf")))
+//              .add(new div().id("rdf").add("her kommer listen...").add(new h1("asdf")))
 
 
 //              <p id="info">This paper was written by < span rel = "dc:creator"resource = "#me" > < span property = "foaf:name" > Ben
 //        Adida</span >.</span ></p >
 
 
-        .add(new p().id("info")
-          .add("This paper was written by ")
-          .add(
-            new span()
-              .set("rel", "dc:creator" )
-              .set("resource", "#me")
-              .add( new span("Ben Adida").property( "foaf:name").add( "Ben Adida" )
-              )))
-
+//        .add(new p().id("info")
+//          .add("This paper was written by ")
+//          .add(
+//            new span()
+//              .set("rel", "dc:creator" )
+//              .set("resource", "#me")
+//              .add( new span("Ben Adida").property( "foaf:name").add( "Ben Adida" )
+//              )))
+//
 
 
           ).toString();
