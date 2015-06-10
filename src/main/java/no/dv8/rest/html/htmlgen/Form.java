@@ -2,10 +2,10 @@ package no.dv8.rest.html.htmlgen;
 
 import com.google.gson.GsonBuilder;
 import lombok.Value;
-import no.dv8.rest.html.support.rest.ApiResource;
 import no.dv8.rest.html.support.Endpoint;
 import no.dv8.rest.html.support.Parameter;
 import no.dv8.rest.html.support.reflect.Properties;
+import no.dv8.rest.html.support.rest.ApiResource;
 import no.dv8.xhtml.generation.elements.*;
 import no.dv8.xhtml.generation.support.Element;
 import no.dv8.xhtml.generation.support.Str;
@@ -30,6 +30,7 @@ public class Form {
         return new form()
           .set("rel", endpoint.getRelationType())
           .set("href", path)
+          .set("enctype", "application/x-www-form-urlencoded")
           .action(path)
           .method(endpoint.getMethods().get(0))
           .add(

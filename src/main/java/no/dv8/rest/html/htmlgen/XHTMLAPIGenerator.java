@@ -144,7 +144,8 @@ public class XHTMLAPIGenerator<T> {
               .add(
                 items
                   .stream()
-                  .map(i -> new XHTMLAPIGenerator<>(i, null, new HTMLBodyWriter().autoSelfLinks(i, what)).itemToXHTML())
+//                  .map(i -> new XHTMLAPIGenerator<>(i, null, new HTMLBodyWriter().autoSelfLinks(i, what)).itemToXHTML())
+                  .map(i -> new XHTMLAPIGenerator<>(i, null, linker.links(i)).itemToXHTML())
                   .map(l -> new li().add(l))
 //              .map(e -> asList(e, new Custom("hr")))
                   .collect(Collectors.toList())
@@ -206,11 +207,12 @@ public class XHTMLAPIGenerator<T> {
         div d = new div()
           .add(new h("Collection '" + fname + "': " + col.size()));
         col.forEach(x -> {
-            List<Endpoint> links = HTMLBodyWriter
-              .autoLinks(x, null)
-              .stream()
-              .filter(e -> e.getRelationType().equals(Rels.Self))
-              .collect(toList());
+//            List<Endpoint> links = HTMLBodyWriter
+//              .autoLinks(x, null)
+//              .stream()
+//              .filter(e -> e.getRelationType().equals(Rels.Self))
+//              .collect(toList());
+            List<Endpoint> links = linker.links(x);
             log.info("Links for " + x + "=" + links);
             d.add(
               new XHTMLAPIGenerator<>(x, null, links).itemToXHTML()

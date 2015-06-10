@@ -9,6 +9,7 @@ import no.dv8.rest.html.support.APIReader;
 import no.dv8.rest.html.support.Endpoint;
 import no.dv8.rest.html.support.X;
 import no.dv8.xhtml.generation.elements.*;
+import no.dv8.xhtml.generation.support.Element;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -81,7 +82,7 @@ public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
     @Override
     public void writeTo(T o, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
         try {
-            log.info("Writing object of class " + type + ", " + httpHeaders + ", " + mediaType);
+            log.info("Writing object of class " + type + ", " + genericType + ", " + mediaType);
             OutputStreamWriter writer = new OutputStreamWriter(entityStream);
             writer.write(toString(o, genericType));
             writer.close();
@@ -122,7 +123,7 @@ public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
             new body()
               .vocab("http://example.org")
               .add(new h1("Auto-generated HTML version of " + what).clz("apiheader"))
-              .add(new XHTMLAPIGenerator(o, what, autoLinks(o, what)).itemToXHTML())
+              .add(itemToElement(o, what))
 //              .add(new div().id("rdf").add("her kommer listen...").add(new h1("asdf")))
 
 
@@ -142,6 +143,10 @@ public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
 
 
           ).toString();
+    }
+
+    public Element itemToElement(T o, Type what) {
+        return new XHTMLAPIGenerator(o, what, autoLinks(o, what)).itemToXHTML();
     }
 
 
