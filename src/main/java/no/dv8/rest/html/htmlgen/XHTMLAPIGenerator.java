@@ -27,6 +27,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
@@ -61,21 +63,31 @@ public class XHTMLAPIGenerator<T> {
         String path = e.getRelativePath();
         for (Parameter pm : e.getParameters()) {
             if (PathParam.class.getSimpleName().equals(pm.getJaxrsType())) {
-                String ref = "{" + pm.getName() + "}";
-                log.fine("Searching for: " + ref + " in " + path);
-                if (path.contains(ref)) {
+//                String rex = "(\\{" + pm.getName() + "(\\:[^}]*)\\})";
+                String rex = "(\\{" + pm.getName() + "(:[^}]*)?\\})";
+                log.fine("Searching for: " + rex + " in " + path);
+                Pattern patt = Pattern.compile(rex);
+                Matcher matcher = patt.matcher(path);
+                if (matcher.find()) {
                     Object val = pm.getValue() != null ? pm.getValue() : new Properties(item).get(pm.getName());
                     if (val != null) {
-                        path = path.replaceFirst(quote(ref), quoteReplacement(val.toString()));
-                        log.fine("Found: " + ref + " in " + path);
+                        StringBuffer sb = new StringBuffer();
+                        matcher = patt.matcher(path);
+                        while(matcher.find()) {
+                            matcher.appendReplacement(sb, quoteReplacement(val.toString()));
+                        }
+                        matcher.appendTail(sb);
+                        path = sb.toString();
+                        log.fine("Found: " + rex + " in " + path);
                     } else {
                         log.info("Hm... " + pm + " does not have value");
                     }
                 } else {
-                    log.info("Hm... " + path + " does not contain " + ref);
+                    log.info("Hm... " + path + " does not match " + rex);
                 }
             }
         }
+//        log.fine( "Path for " + item + " based on " + e + ": " + path);
         return path;
     }
 
@@ -163,7 +175,7 @@ public class XHTMLAPIGenerator<T> {
     public Element<?> introspect() {
         String tname = getTypeName(item, null);
         return semdec.typed(tname, new div()
-                        .add(new h3(tname))
+                        .add(new h3(title))
                         .add(propList(item))
                         .add(linkSection("Links"))
         );
@@ -211,20 +223,19 @@ public class XHTMLAPIGenerator<T> {
     }
 
     public Element<?> collectionSection(String fname, Collection<?> col) {
+        ul listHolder = new ul();
         div d = new div()
-                .add(new h("Collection '" + fname + "': " + col.size()));
+                .add(new h("Collection '" + fname + "': " + col.size()))
+                .add(listHolder);
+
         col.forEach(x -> {
-//            List<Endpoint> links = HTMLBodyWriter
-//              .autoLinks(x, null)
-//              .stream()
-//              .filter(e -> e.getRelationType().equals(Rels.Self))
-//              .collect(toList());
-            List<Endpoint> links = linker.links(x);
-            log.info("Links for " + x + "=" + links);
-            d.add(
-                    new XHTMLAPIGenerator<>(fname, x, null, links).itemToXHTML()
-//              itemToXHTML(x, null, links)
-            );
+            if (!Properties.isBean(x)) {
+                listHolder.add(new li().add(x.toString()));
+            } else {
+                List<Endpoint> links = linker.links(x);
+                log.info("Links for " + x + "=" + links);
+                listHolder.add( new XHTMLAPIGenerator<>(fname, x, null, links).itemToXHTML() );
+            }
         });
         return d;
     }
