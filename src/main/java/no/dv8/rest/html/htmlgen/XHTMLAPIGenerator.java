@@ -248,7 +248,6 @@ public class XHTMLAPIGenerator<T> {
                 listHolder.add(new li().add(x.toString()));
             } else {
                 List<Endpoint> links = linker.links(x);
-                log.info("Links for " + x + "=" + links);
                 listHolder.add( new li().add( new XHTMLAPIGenerator<>("", x, null, links).itemToXHTML() ));
             }
         });
