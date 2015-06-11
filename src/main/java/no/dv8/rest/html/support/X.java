@@ -17,7 +17,7 @@ public abstract class X<T extends X> implements Cloneable, XAware, XResource {
     }
 
     public Element<?> toXHTML(List<Endpoint> links) {
-        return new XHTMLAPIGenerator( this, this.getClass(), links).itemToXHTML();
+        return new XHTMLAPIGenerator( null, this, this.getClass(), links).itemToXHTML();
     }
 
     public List<Endpoint> links = new ArrayList<>();

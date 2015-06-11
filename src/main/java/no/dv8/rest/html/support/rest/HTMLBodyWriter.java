@@ -146,7 +146,7 @@ public class HTMLBodyWriter<T> implements MessageBodyWriter<T> {
     }
 
     public Element itemToElement(T o, Type what) {
-        return new XHTMLAPIGenerator(o, what, autoLinks(o, what)).itemToXHTML();
+        return new XHTMLAPIGenerator(null, o, what, autoLinks(o, what)).itemToXHTML();
     }
 
 

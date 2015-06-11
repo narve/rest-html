@@ -77,7 +77,6 @@ public class ApiResource {
         if( endpoint.size() != 1 ) {
             throw new RuntimeException("UPS: " + endpoint.size() + " matches for " + resource + "." + methodName );
         }
-        XHTMLAPIGenerator gen = new XHTMLAPIGenerator(null, null, null);
         return new Form(null, endpoint.get(0) ).form().toString();
     }
 

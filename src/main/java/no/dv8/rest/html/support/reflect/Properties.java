@@ -26,8 +26,8 @@ public class Properties {
         return o != null && isBean( o.getClass().getName());
     }
 
-    public static boolean isBean(String n ) {
-        return !n.startsWith("java");
+    public static boolean isBean(String cname ) {
+        return !cname.startsWith("java");
     }
 
     public Map<String, Object> getProps() {
