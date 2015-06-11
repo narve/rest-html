@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.extern.java.Log;
 import no.dv8.rest.html.htmlgen.linker.Linker;
 import no.dv8.rest.html.htmlgen.linker.NoOpLinker;
+import no.dv8.rest.html.support.reflect.Annotations;
 import no.dv8.rest.sample.semantic.Rels;
 import no.dv8.rest.sample.semantic.Semantics;
 import no.dv8.rest.html.support.Endpoint;
@@ -19,14 +20,18 @@ import no.dv8.xhtml.generation.support.Element;
 import no.dv8.xhtml.generation.support.Str;
 
 import javax.ws.rs.PathParam;
+import javax.xml.bind.annotation.XmlTransient;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -152,7 +157,7 @@ public class XHTMLAPIGenerator<T> {
         return new div()
                 .add(new h2(tname))
                 .add(
-                        new ol()
+                        new ul()
 //              .clz(Semantics.collectionOf(tname))
                                 .add(
                                         items
@@ -181,12 +186,22 @@ public class XHTMLAPIGenerator<T> {
         );
     }
 
+    public static boolean shouldIgnore( PropertyDescriptor pd ) {
+        Set<String> ignorables = new HashSet<>( asList( "jsonignore", "xmltransient" ) );
+        List<Annotation> annotations = asList( pd.getReadMethod().getAnnotations());
+        Annotation[] aa = annotations.toArray(new Annotation[0]);
+        if( Annotations.hasAnnotation(XmlTransient.class, aa) )
+            return true;
+        return annotations.stream().anyMatch(a -> ignorables.contains(a.getClass().getSimpleName().toLowerCase()));
+    }
+
     public dl propList(Object item) {
         dl props = new dl().clz("props");
         try {
             List<PropertyDescriptor> pda = asList(Introspector.getBeanInfo(item.getClass()).getPropertyDescriptors());
             pda
                     .stream()
+                    .filter( pd -> !XHTMLAPIGenerator.shouldIgnore(pd))
                     .filter(pd -> !"class".equals(pd.getName()))
                     .forEach(pd -> props.add(toXHTML(pd, item)));
         } catch (IntrospectionException e) {
@@ -225,7 +240,7 @@ public class XHTMLAPIGenerator<T> {
     public Element<?> collectionSection(String fname, Collection<?> col) {
         ul listHolder = new ul();
         div d = new div()
-                .add(new h("Collection '" + fname + "': " + col.size()))
+                .add(new h("Collection '" + fname + "': " + col.size() + " items"))
                 .add(listHolder);
 
         col.forEach(x -> {
@@ -234,7 +249,7 @@ public class XHTMLAPIGenerator<T> {
             } else {
                 List<Endpoint> links = linker.links(x);
                 log.info("Links for " + x + "=" + links);
-                listHolder.add( new XHTMLAPIGenerator<>(fname, x, null, links).itemToXHTML() );
+                listHolder.add( new li().add( new XHTMLAPIGenerator<>("", x, null, links).itemToXHTML() ));
             }
         });
         return d;
@@ -242,7 +257,9 @@ public class XHTMLAPIGenerator<T> {
 
     public Element<?> definition(String name, Object val) {
         Element<?> content;
-        if (Properties.isBean(val)) {
+        if( val instanceof Enum ) {
+            content = new span(val.toString());
+        } else if (Properties.isBean(val)) {
             content = semdec.typed(getTypeName(val, null), propList(val));
         } else {
             content = new Str(val == null ? null : val.toString());
