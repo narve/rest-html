@@ -24,7 +24,6 @@ public class Form {
     private final Object item;
     private final Endpoint endpoint;
 
-
     public Element<?> form() {
         String path = pathFromTemplate(endpoint, item);
         return new form()
@@ -36,7 +35,7 @@ public class Form {
           .add(
             new fieldset()
               .add(new legend(endpoint.getTitle()))
-              .add(new a("Link to form").href(ApiResource.linkToForm(endpoint)))
+//              .add(new a("Link to form").href(ApiResource.linkToForm(endpoint)))
               .add(item == null ? new Str("") : new p("Editing: " + item))
               .add(endpoint.getDescription() != null ? endpoint.getDescription() : null)
               .add(inputs(endpoint))

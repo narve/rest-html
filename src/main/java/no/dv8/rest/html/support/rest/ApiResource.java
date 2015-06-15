@@ -60,7 +60,7 @@ public class ApiResource {
     }
 
     public static String linkToForm( no.dv8.rest.html.support.Endpoint e ) {
-        return "/myapp/api/form/" + e.getJavaClz().getName() + "/" + e.getJavaMethod().getName();
+        return "/1.0/form/" + e.getJavaClz().getName() + "/" + e.getJavaMethod().getName();
     }
 
     @GET
